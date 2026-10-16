@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality Check & Budget Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                        accentViolet: '#8b5cf6',
+                        accentMint: '#10b981',
+                        accentPink: '#f43f5e'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 bg-darkbg text-slate-100">
+
+    <!-- Header Navigation -->
+    <header class="max-w-3xl w-full mx-auto flex justify-center sm:justify-start items-center py-4 mb-6">
+        <div class="flex items-center space-x-2">
+            <span class="text-3xl">&#9889;</span>
+            <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-accentViolet to-accentMint">
+                REALITY CHECK
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="mainContainer" class="max-w-3xl w-full mx-auto space-y-8">
+        
+        <!-- Hero Title -->
+        <section class="text-center space-y-3">
+            <h1 id="heroTitle" class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                How much <span class="bg-clip-text text-transparent bg-gradient-to-r from-accentViolet via-pink-500 to-accentMint">life time</span> will your purchase cost?
+            </h1>
+            <p id="heroSubtitle" class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+                Find out how many hours you actually have to hustle and how much your monthly impulse spending adds up over a full year.
+            </p>
+        </section>
+
+        <!-- Input Section Card -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+            
+            <!-- Step 1: Hourly Wage -->
+            <div class="space-y-2">
+                <label id="lblWage" class="block font-bold text-slate-200 text-sm sm:text-base uppercase tracking-wider text-accentViolet">
+                    1. Your Hourly Wage (Net)
+                </label>
+                <div class="relative">
+                    <input type="number" id="hourlyWage" value="15.00" step="0.50" min="1" class="w-full bg-slate-900/80 border border-slate-700 rounded-2xl py-3.5 px-4 text-xl font-bold text-white focus:outline-none focus:border-accentViolet transition">
+                    <span class="absolute right-4 top-3.5 text-slate-400 font-bold text-xl">$ / h</span>
+                </div>
+            </div>
+
+            <!-- Step 2: Desired Purchase -->
+            <div class="space-y-4 pt-2">
+                <label id="lblWish" class="block font-bold text-slate-200 text-sm sm:text-base uppercase tracking-wider text-accentViolet">
+                    2. Desired Purchase
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <span id="lblWishItem" class="block text-xs text-slate-400 mb-1">What do you want to buy?</span>
+                        <input type="text" id="wishName" placeholder="e.g. iPhone 16, Festival Ticket" value="iPhone 16" class="w-full bg-slate-900/80 border border-slate-700 rounded-2xl py-3 px-4 text-slate-100 font-semibold focus:outline-none focus:border-accentViolet transition">
+                    </div>
+                    <div>
+                        <span id="lblWishPrice" class="block text-xs text-slate-400 mb-1">Price of the item in $</span>
+                        <div class="relative">
+                            <input type="number" id="wishPrice" value="999" min="1" class="w-full bg-slate-900/80 border border-slate-700 rounded-2xl py-3 px-4 text-xl font-bold text-white focus:outline-none focus:border-accentViolet transition">
+                            <span class="absolute right-4 top-3 text-slate-400 font-bold">$</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Subscriptions & Impulse Spending Sliders -->
+            <div class="space-y-4 pt-2">
+                <div class="flex justify-between items-center">
+                    <label id="lblSubscriptions" class="block font-bold text-slate-200 text-sm sm:text-base uppercase tracking-wider text-accentViolet">
+                        3. Monthly Impulse Expenses (Subscription Trap)
+                    </label>
+                </div>
+                
+                <div class="space-y-5 bg-slate-900/50 p-5 rounded-2xl border border-slate-800">
+                    <!-- Delivery food -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span id="subDelivery" class="font-semibold text-slate-300">Food Delivery / UberEats</span>
+                            <span id="valDelivery" class="font-bold text-accentMint">$40 / mo.</span>
+                        </div>
+                        <input type="range" id="rangeDelivery" min="0" max="200" value="40" step="5" oninput="updateSliderVal('Delivery')" class="w-full">
+                    </div>
+
+                    <!-- Vapes / Tobacco / Snacks -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span id="subSnacks" class="font-semibold text-slate-300">Vapes / Tobacco / Snacks</span>
+                            <span id="valSnacks" class="font-bold text-accentMint">$30 / mo.</span>
+                        </div>
+                        <input type="range" id="rangeSnacks" min="0" max="200" value="30" step="5" oninput="updateSliderVal('Snacks')" class="w-full">
+                    </div>
+
+                    <!-- Subscriptions -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span id="subAbos" class="font-semibold text-slate-300">Subscriptions (Netflix, Spotify, Gym)</span>
+                            <span id="valAbos" class="font-bold text-accentMint">$25 / mo.</span>
+                        </div>
+                        <input type="range" id="rangeAbos" min="0" max="150" value="25" step="5" oninput="updateSliderVal('Abos')" class="w-full">
+                    </div>
+
+                    <!-- Coffee to go / Energy Drinks -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span id="subCoffee" class="font-semibold text-slate-300">Coffee to go / Energy Drinks</span>
+                            <span id="valCoffee" class="font-bold text-accentMint">$20 / mo.</span>
+                        </div>
+                        <input type="range" id="rangeCoffee" min="0" max="150" value="20" step="5" oninput="updateSliderVal('Coffee')" class="w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <button onclick="calculateReality()" id="btnCalculate" class="w-full py-4 rounded-2xl font-black text-lg bg-gradient-to-r from-accentViolet to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg neon-glow transition transform active:scale-95 flex items-center justify-center space-x-2 cursor-pointer">
+                <span>CALCULATE REALITY CHECK &#9889;</span>
+            </button>
+
+        </div>
+
+        <!-- Result Container -->
+        <div id="resultsCard" class="hidden glass-card rounded-3xl p-6 sm:p-8 space-y-6 border-accentViolet/50 transition-all duration-500">
+            
+            <div class="text-center pb-2 border-b border-slate-800">
+                <span id="badgePain" class="px-3 py-1 bg-pink-500/10 border border-pink-500/30 text-pink-400 rounded-full text-xs font-black tracking-widest uppercase inline-block mb-2">
+                    PAIN LEVEL: HIGH
+                </span>
+                <h2 id="resHeader" class="text-2xl font-black text-slate-100">
+                    Your Reality Check Breakdown
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <!-- Result 1: Hours -->
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between text-center space-y-2">
+                    <span id="resTitle1" class="text-xs uppercase font-bold text-slate-400">1. Work Time</span>
+                    <div>
+                        <div id="resHours" class="text-3xl sm:text-4xl font-black text-accentViolet">66.6 hrs</div>
+                    </div>
+                    <p id="resText1" class="text-xs text-slate-300">
+                        hours of work to afford this item.
+                    </p>
+                </div>
+
+                <!-- Result 2: Work Days -->
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between text-center space-y-2">
+                    <span id="resTitle2" class="text-xs uppercase font-bold text-slate-400">2. Full Work Days</span>
+                    <div>
+                        <div id="resDays" class="text-3xl sm:text-4xl font-black text-pink-500">8.3 Days</div>
+                    </div>
+                    <p id="resText2" class="text-xs text-slate-300">
+                        full 8-hour shifts solely for this single purchase.
+                    </p>
+                </div>
+
+                <!-- Result 3: Subscription Shock -->
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between text-center space-y-2">
+                    <span id="resTitle3" class="text-xs uppercase font-bold text-slate-400">3. Yearly Impulse Shock</span>
+                    <div>
+                        <div id="resYearly" class="text-3xl sm:text-4xl font-black text-accentMint">$1,380</div>
+                    </div>
+                    <p id="resText3" class="text-xs text-slate-300">
+                        annual total spent on small impulse habits.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Big Summary Box -->
+            <div class="bg-gradient-to-r from-violet-950/40 via-slate-900 to-emerald-950/40 p-6 rounded-2xl border border-slate-700 text-center space-y-2">
+                <p id="summaryText" class="text-slate-200 text-sm sm:text-base leading-relaxed font-semibold">
+                    Your annual impulse spending equals <span id="wishMultiplier" class="text-accentMint font-black text-xl">1.4x</span> the cost of a <span id="summaryWishName" class="text-accentViolet font-black">iPhone 16</span>!
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-3xl w-full mx-auto text-center py-6 text-xs text-slate-500">
+        <p>&copy; <span id="year"></span> Reality Check Calculator — Clean & Simple Financial Clarity for Gen-Z.</p>
+    </footer>
+
+    <!-- External JS -->
+    <script src="script.js"></script>
+</body>
+</html>
